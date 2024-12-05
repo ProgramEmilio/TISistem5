@@ -258,6 +258,30 @@ $Usu = $result->fetch_assoc(); // Obtener el registro como un array asociativo
     <label for="catalogo">Cartalogo de Servicios:</label><br>
     <input type="text" id="catalogo" name="catalogo" required><br><br>
 
+    <label for="Id_especial">Especialidad a la que pertenece:</label><br>
+        <select name="Id_especial" id="Id_especial">
+        <?php
+        
+            // Consulta para obtener los departamentos
+            $sql = "SELECT Id_especial, Especial FROM catalogo_especial";
+            $result = $conn->query($sql);
+
+            // Verificar si hay resultados
+            if ($result->num_rows > 0) {
+                // Generar las opciones dinámicamente
+                while ($row = $result->fetch_assoc()) {
+                    echo '<option value="' . $row['Id_especial'] . '">' . $row['Especial'] . '</option>';
+                }
+            } else {
+                echo '<option value="">No hay especialidades disponibles</option>';
+            }
+
+            // Cerrar la conexión
+            $conn->close();
+            
+        ?>
+        </select><br><br>
+
     <input type="submit" value="Registrar Servicio" name="levantar">
     </form>
 
