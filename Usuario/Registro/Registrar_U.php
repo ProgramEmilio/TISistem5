@@ -8,14 +8,15 @@
         $apellido = $_POST['apellido'];
         $Id_Utipo = $_POST['Id_Utipo'];
         $Id_departamento = $_POST['Id_departamento'];
+        $Id_especial = $_POST['Id_especial'];
         $contraseña = $_POST['contraseña'];
         } else {
             echo 'El formulario no ha sido enviado correctamente.';
         }
     
         // Preparar la consulta SQL
-        $sql = "INSERT INTO Usuarios (Id_Utipo, nombre, apellido, Id_departamento, contraseña) 
-        VALUES ('$Id_Utipo', '$nombre','$apellido', '$Id_departamento', '$contraseña')";
+        $sql = "INSERT INTO Usuarios (Id_Utipo, nombre, apellido, Id_departamento, Id_especial, contraseña) 
+        VALUES ('$Id_Utipo', '$nombre','$apellido', '$Id_departamento', '$Id_especial', '$contraseña')";
 
         // Ejecutar la consulta SQL
         if(mysqli_query($conn, $sql)) {

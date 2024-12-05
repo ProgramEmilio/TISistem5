@@ -139,10 +139,17 @@ $Usu = $result->fetch_assoc(); // Obtener el registro como un array asociativo
 	include('../../BD/ConexionBD.php');
 
 	//$sql = "SELECT * FROM Usuarios";
-    $sql = "SELECT Usuarios.Id_usuario, Tipo_Usuarios.Utipo AS Utipo, Usuarios.nombre, Usuarios.apellido, departamento.nombre AS nombre_departamento
+    $sql = "SELECT 
+        Usuarios.Id_usuario, 
+        Tipo_Usuarios.Utipo AS Utipo, 
+        Usuarios.nombre, 
+        Usuarios.apellido, 
+        departamento.nombre AS nombre_departamento, 
+        catalogo_especial.Especial AS especial
     FROM Usuarios
     JOIN Tipo_Usuarios ON Usuarios.Id_Utipo = Tipo_Usuarios.Id_Utipo
-    JOIN departamento ON Usuarios.Id_departamento = departamento.Id_departamento";
+    JOIN departamento ON Usuarios.Id_departamento = departamento.Id_departamento
+    JOIN catalogo_especial ON Usuarios.Id_especial = catalogo_especial.Id_especial";
 
 	$result=$conn->query($sql);
 
@@ -154,6 +161,7 @@ $Usu = $result->fetch_assoc(); // Obtener el registro como un array asociativo
 	echo "<th scope='col'>Nombre</th>";
 	echo "<th scope='col'>Apellido</th>";
 	echo "<th scope='col'>Departamento</th>";
+    echo "<th scope='col'>Especialidad</th>";
     echo "<th scope='col'>Contraseña</th>";
 	//echo "<th scope='col'>Editar</th>";
     echo "<th scope='col'>Eliminar</th>";
@@ -167,6 +175,7 @@ $Usu = $result->fetch_assoc(); // Obtener el registro como un array asociativo
         echo "<td>". $fila['nombre']."</td>";
         echo "<td>". $fila['apellido']."</td>";
         echo "<td>". $fila['nombre_departamento']."</td>";
+        echo "<td>". $fila['especial']."</td>";
         echo "<td>********</td>";
         //echo "<td>". $fila['contraseña']."</td>";
 		

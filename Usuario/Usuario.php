@@ -140,10 +140,17 @@ $Usu = $result->fetch_assoc(); // Obtener el registro como un array asociativo
     <?php
 	include('../BD/ConexionBD.php');
 
-	$sql = "SELECT Usuarios.Id_usuario, Tipo_Usuarios.Utipo AS Utipo, Usuarios.nombre, Usuarios.apellido, departamento.nombre AS nombre_departamento
+	$sql = "SELECT 
+        Usuarios.Id_usuario, 
+        Tipo_Usuarios.Utipo AS Utipo, 
+        Usuarios.nombre, 
+        Usuarios.apellido, 
+        departamento.nombre AS nombre_departamento, 
+        catalogo_especial.Especial AS especial
     FROM Usuarios
     JOIN Tipo_Usuarios ON Usuarios.Id_Utipo = Tipo_Usuarios.Id_Utipo
-    JOIN departamento ON Usuarios.Id_departamento = departamento.Id_departamento";
+    JOIN departamento ON Usuarios.Id_departamento = departamento.Id_departamento
+    JOIN catalogo_especial ON Usuarios.Id_especial = catalogo_especial.Id_especial";
 
 	$result = $conn->query($sql);
 
@@ -155,6 +162,7 @@ $Usu = $result->fetch_assoc(); // Obtener el registro como un array asociativo
 	echo "<th scope='col'>Nombre</th>";
 	echo "<th scope='col'>Apellido</th>";
 	echo "<th scope='col'>Departamento</th>";
+    echo "<th scope='col'>Especialidad</th>";
     echo "<th scope='col'>Contraseña</th>";
 	echo "</tr>";
 	echo "</thead>";
@@ -166,6 +174,7 @@ $Usu = $result->fetch_assoc(); // Obtener el registro como un array asociativo
         echo "<td>". $fila['nombre']."</td>";
         echo "<td>". $fila['apellido']."</td>";
         echo "<td>". $fila['nombre_departamento']."</td>";
+        echo "<td>". $fila['especial']."</td>";
         echo "<td>********</td>";
 		echo "</tr>";
 	}
@@ -174,7 +183,11 @@ $Usu = $result->fetch_assoc(); // Obtener el registro como un array asociativo
 ?>
 
 <div class="botones">
-    <button class="btn_edi" onclick="toggleVisibility()"><p class="tx">Tipo usuario</p></button>
+    <button class="btn_edi" onclick="toggleVisibility('toggleSection')"><p class="tx">Tipo usuario</p></button>
+</div>
+
+<div class="botones">
+    <button class="btn_edi" onclick="toggleVisibility('toggleSection2')"><p class="tx">Especialidades</p></button>
 </div>
 
 <!-- Tabla y formulario para tipos de usuario -->
@@ -202,27 +215,63 @@ $Usu = $result->fetch_assoc(); // Obtener el registro como un array asociativo
     echo "</tbody>";
     echo "</table>";
     ?>
-
-    <br>
-
     <form id="form_tipoUsuario" class="form_tipoUsuario" action="Registrar_TipoU.php" method="POST" enctype="multipart/form-data">
-        <label for="Utipo">Tipo Usuario:</label>
-        <input type="text" id="Utipo" name="Utipo"><br><br>
+            <label for="Utipo">Tipo Usuario:</label>
+            <input type="text" id="Utipo" name="Utipo"><br><br>
 
-        <input type="submit" value="Registrar">
-    </form>
+            <input type="submit" value="Registrar">
+        </form>
+    <br>
+    </div>
 
-</div>
+    
 
-<script>
-function toggleVisibility() {
-    // Selecciona el contenedor que agrupa la tabla y el formulario
-    var toggleSection = document.getElementById("toggleSection");
+    <!-- Tabla y formulario para Especialidades -->
+    <div id="toggleSection2" style="display: none;">
+        <?php
+        $sql = "SELECT * FROM catalogo_especial";
+        $result = $conn->query($sql);
 
-    // Alterna la visibilidad del contenedor
-    toggleSection.style.display = (toggleSection.style.display === "none" || toggleSection.style.display === "") ? "block" : "none";
-}
-</script>
+        echo "<table class='tabla'>";
+        echo "<thead>";
+        echo "<tr class='cont'>";
+        echo "<th scope='col'>ID</th>";
+        echo "<th scope='col'>Especialidad</th>";
+        echo "<th scope='col'>Eliminar</th>";
+        echo "</tr>";
+        echo "</thead>";
+        echo "<tbody>";
+        while ($fila = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<th scope='row'>".$fila['Id_especial']."</th>";    
+            echo "<td>". $fila['Especial']."</td>";
+            echo "<td><a href='Eliminar_Especial.php?Id_especial=".$fila['Id_especial']."' onclick=\"return confirm('¿Estás seguro de que deseas eliminar esta especialidad?');\">Eliminar</a></td>";
+            echo "</tr>";
+        }
+        echo "</tbody>";
+        echo "</table>";
+        ?>
+
+        <br>
+
+        <form id="form_especial" class="form_tipoUsuario" action="Registrar_Especial.php" method="POST" enctype="multipart/form-data">
+            <label for="Especial">Especialidad:</label>
+            <input type="text" id="Especial" name="Especial"><br><br>
+
+            <input type="submit" value="Registrar">
+        </form>
+
+    </div>
+
+    <script>
+        function toggleVisibility(sectionId) {
+            // Selecciona el contenedor que agrupa la tabla y el formulario
+            var toggleSection = document.getElementById(sectionId);
+
+            // Alterna la visibilidad del contenedor
+            toggleSection.style.display = (toggleSection.style.display === "none" || toggleSection.style.display === "") ? "block" : "none";
+        }
+    </script>
 
 
 	<a href="../Menu.php" class="regresar">Regresar</a>

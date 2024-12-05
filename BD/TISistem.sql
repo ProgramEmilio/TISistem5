@@ -16,6 +16,7 @@ Id_Utipo int not null,
 nombre varchar(50) not null,
 apellido varchar(50) not null,
 Id_departamento int not null,
+Id_especial int not null,
 contraseña varchar(20)
 );
 
@@ -112,7 +113,13 @@ presupuesto float not null
 
 Create table catalogo_servicios(
 Id_catalogo int not null primary key auto_increment,
-catalogo text not null
+catalogo text not null,
+Id_especial int not null
+);
+
+Create table catalogo_especial(
+Id_especial int not null primary key auto_increment,
+Especial text not null
 );
 
 Create table Problemas(
@@ -162,8 +169,13 @@ foreign key(Id_usuario) references Usuarios(Id_usuario),
 foreign key(Id_trabajador) references Usuarios(Id_usuario)
 );
 
+alter table catalogo_servicios add(
+foreign key(Id_especial) references catalogo_especial(Id_especial)
+);
+
 alter table Usuarios add(
-foreign key(Id_departamento) references departamento(Id_departamento)
+foreign key(Id_departamento) references departamento(Id_departamento),
+foreign key(Id_especial) references catalogo_especial(Id_especial)
 );
 alter table edificio add(
 foreign key(Id_departamento) references departamento(Id_departamento)
@@ -187,6 +199,29 @@ INSERT INTO `departamento` (`Id_departamento`, `nombre`, `J_departamento`) VALUE
 (NULL, 'Sistemas', 'Marysol'), 
 (NULL, 'Gestion Empresarial', 'Fidel castro'), 
 (NULL, 'Industrial', 'Espinosa paz');
+
+-- Insertar datos en catalogo_especial
+INSERT INTO catalogo_especial (Especial) VALUES 
+('Reparación de Hardware'),
+('Mantenimiento Preventivo'),
+('Recuperación de Datos'),
+('Instalación de Software'),
+('Optimización de Rendimiento'),
+('Ninguna');
+
+-- Insertar datos en catalogo_servicios
+INSERT INTO catalogo_servicios (catalogo, Id_especial) VALUES 
+('Cambio de componentes dañados', 1),
+('Diagnóstico de fallos físicos', 1),
+('Limpieza interna y externa', 2),
+('Revisión de fuentes de alimentación', 2),
+('Recuperación de archivos eliminados', 3),
+('Reparación de discos duros', 3),
+('Instalación de sistemas operativos', 4),
+('Actualización de controladores', 4),
+('Optimización de velocidad del sistema', 5),
+('Eliminación de software no deseado', 5);
+
 
 INSERT INTO `edificio` (`Id_edificio`, `Id_departamento`) VALUES 
 ('A', '1'), 
@@ -212,13 +247,13 @@ INSERT INTO `tipo_usuarios` (`Id_Utipo`, `Utipo`) VALUES
 (4, 'Jefe de taller'),
 (5, 'Consejo');
 
-INSERT INTO `usuarios` (`Id_usuario`, `Id_Utipo`, `nombre`, `apellido`, `Id_departamento`, `contraseña`) VALUES 
-(1, '1', 'Emilio', 'Palma Jimenez', '1', '12'), 
-(2, '2', 'Pedro', 'Ramirez Parra', '2', '12'), 
-(3, '3', 'Juan', 'Melendres Lechuga', '1', '12'), 
-(4, '2', 'Ramon', 'Ramirez Parra', '3', '12'), 
-(5, '4', 'Angel', 'sanchez de la Cruz', '1', '12'), 
-(6, '3', 'Ghost', 'Ramirez Parra', '1', '12');
+INSERT INTO `usuarios` (`Id_usuario`, `Id_Utipo`, `nombre`, `apellido`, `Id_departamento`,`Id_especial`, `contraseña`) VALUES 
+(1, '1', 'Emilio', 'Palma Jimenez', '1', '1', '12'), 
+(2, '2', 'Pedro', 'Ramirez Parra', '2', '2', '12'), 
+(3, '3', 'Juan', 'Melendres Lechuga', '1', '3', '12'), 
+(4, '2', 'Ramon', 'Ramirez Parra', '3', '1', '12'), 
+(5, '4', 'Angel', 'sanchez de la Cruz', '1', '2', '12'), 
+(6, '3', 'Ghost', 'Ramirez Parra', '1', '4', '12');
 
 INSERT INTO `salon` (`Id_salon`, `Id_edificio`, `tipo`, `Id_usuario`, `descripcion`) VALUES 
 ('A1', 'A', '1', '1', 'Clases normales'), 

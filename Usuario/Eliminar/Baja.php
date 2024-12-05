@@ -141,13 +141,20 @@ $Usu = $result->fetch_assoc(); // Obtener el registro como un array asociativo
         if (isset($_GET['Id_usuario']) && !empty($_GET['Id_usuario'])) {
             $Id_usuario = mysqli_real_escape_string($conn, $_GET['Id_usuario']);
 
-        $sql = "SELECT Usuarios.Id_usuario, Tipo_Usuarios.Utipo AS Utipo, Usuarios.nombre, Usuarios.apellido, 
-        departamento.nombre AS nombre_departamento, Usuarios.contraseña
+            $sql = "SELECT 
+            Usuarios.Id_usuario, 
+            Tipo_Usuarios.Utipo AS Utipo, 
+            Usuarios.nombre, 
+            Usuarios.apellido, 
+            departamento.nombre AS nombre_departamento, 
+            catalogo_especial.Especial AS especial,
+            Usuarios.contraseña
         FROM Usuarios
         JOIN Tipo_Usuarios ON Usuarios.Id_Utipo = Tipo_Usuarios.Id_Utipo
         JOIN departamento ON Usuarios.Id_departamento = departamento.Id_departamento
+        JOIN catalogo_especial ON Usuarios.Id_especial = catalogo_especial.Id_especial
         WHERE Usuarios.Id_usuario = " . $_GET['Id_usuario'];
-
+       
         $result = $conn->query($sql);
 
         // Verifica si el usuario existe
@@ -160,6 +167,7 @@ $Usu = $result->fetch_assoc(); // Obtener el registro como un array asociativo
             echo "<p>Nombre: " . $fila['nombre'] . " " . $fila['apellido'] . "</p>";
             echo "<p>Puesto: " . $fila['Utipo'] . "</p>";
             echo "<p>Departamento: " . $fila['nombre_departamento'] . "</p>";
+            echo "<p>Especialidad: ". $fila['especial']."</p>";
             echo "<p>Contraseña: " . $fila['contraseña'] . "</p>";
             
             // Formulario para eliminar el usuario

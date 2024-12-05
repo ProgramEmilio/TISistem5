@@ -209,6 +209,27 @@ $Usu = $result->fetch_assoc(); // Obtener el registro como un array asociativo
                     ?>
                     </select><br><br>
 
+                    <label for="Id_especial">Especialidad:</label><br>
+                    <select name="Id_especial" id="Id_especial">
+                    <?php
+                    
+                        // Consulta para obtener los departamentos
+                        $sql = "SELECT Id_especial, Especial FROM catalogo_especial";
+                        $result = $conn->query($sql);
+
+                        // Verificar si hay resultados
+                        if ($result->num_rows > 0) {
+                            // Generar las opciones dinámicamente
+                            while ($row = $result->fetch_assoc()) {
+                                echo '<option value="' . $row['Id_especial'] . '">' . $row['Especial'] . '</option>';
+                            }
+                        } else {
+                            echo '<option value="">No hay especialidades disponibles</option>';
+                        }
+                        
+                    ?>
+                    </select><br><br>
+
                     <input type="submit" value="Modificar Usuario">
                 </form>
 
