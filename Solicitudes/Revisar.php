@@ -335,26 +335,65 @@ $Usu = $result->fetch_assoc(); // Obtener el registro como un array asociativo
                 echo "<p><strong>Servicio:</strong> " . $nombre_catalogo . "</p>";
                 
                 if (($id_utipo == 1 || $id_utipo == 4) && $row['Estado'] == "Por Asignar") {
-                    // Obtener los trabajadores con Id_Utipo = 3 (solo trabajadores)
-                    $sql_trabajadores = "SELECT Id_usuario, nombre, apellido FROM Usuarios WHERE Id_Utipo = 3";
+                    // Suponiendo que ya tienes el valor de 'Id_reporte' en la variable $row
+                    $id_reporte = $row['Id_reporte']; // Obtener el Id del reporte
+
+                    // Consulta para obtener el 'Id_catalogo' asociado con el reporte
+                    $sql_reporte_catalogo = "SELECT Id_catalogo 
+                                            FROM Reporte 
+                                            WHERE Id_reporte = '$id_reporte'";
+
+                    $result_reporte_catalogo = $conn->query($sql_reporte_catalogo);
+
+                    // Comprobar si se obtuvo el Id_catalogo
+                    if ($result_reporte_catalogo->num_rows > 0) {
+                        $row_reporte = $result_reporte_catalogo->fetch_assoc();
+                        $id_catalogo_servicio = $row_reporte['Id_catalogo']; // Obtener el Id_catalogo
+                    } else {
+                        $id_catalogo_servicio = ''; // Si no se encuentra el reporte, vaciar la variable
+                    }
+
+                    // Obtener la especialidad del servicio asociado al catálogo
+                    $sql_servicio_especialidad = "SELECT ce.Especial
+                                                FROM catalogo_servicios cs
+                                                JOIN catalogo_especial ce ON cs.Id_especial = ce.Id_especial
+                                                WHERE cs.Id_catalogo = '$id_catalogo_servicio'";
+
+                    $result_servicio_especialidad = $conn->query($sql_servicio_especialidad);
+
+                    // Comprobar si se obtuvo la especialidad del servicio
+                    if ($result_servicio_especialidad->num_rows > 0) {
+                        $row_servicio_especialidad = $result_servicio_especialidad->fetch_assoc();
+                        $especialidad_requerida = $row_servicio_especialidad['Especial']; // Obtener la especialidad
+                    } else {
+                        $especialidad_requerida = ''; // Si no hay especialidad, vaciar la variable
+                    }
+
+                    // Consulta para obtener los trabajadores que tengan la misma especialidad
+                    $sql_trabajadores = "SELECT u.Id_usuario, u.nombre, u.apellido 
+                                        FROM Usuarios u
+                                        JOIN catalogo_especial ce ON u.Id_especial = ce.Id_especial
+                                        WHERE u.Id_Utipo = 3 AND ce.Especial = '$especialidad_requerida'";
+
                     $result_trabajadores = $conn->query($sql_trabajadores);
-                
+
+                    // Formulario para seleccionar trabajador
                     echo '<form class="form_reg_usuario" method="POST">';
 
-                    echo '<input type="hidden" name="Id_reporte" value="' . $row['Id_reporte'] . '">';
+                    echo '<input type="hidden" name="Id_reporte" value="' . $id_reporte . '">'; // Agregar Id_reporte al formulario
 
                     echo '<label for="Trabajadores"><strong>Seleccione al Trabajador Designado:</strong></label>';
                     echo '<br>';
                     echo '<select name="Trabajadores" required>';
-                    
+
                     if ($result_trabajadores->num_rows > 0) {
                         while ($row_trabajador = $result_trabajadores->fetch_assoc()) {
-                            echo "<option value='{$row_trabajador['Id_usuario']}'>{$row_trabajador['nombre']} {$row_trabajador['apellido']}</option>";
+                            echo "<option value='{$row_trabajador['Id_usuario']}'>{$row_trabajador['nombre']} {$row_trabajador['apellido']} - {$especialidad_requerida}</option>";
                         }
                     } else {
-                        echo "<option value=''>No hay trabajadores disponibles</option>";
+                        echo "<option value=''>No hay trabajadores disponibles con la especialidad requerida</option>";
                     }
-                    
+
                     echo '</select>';
                     echo '<br>';
                     echo '<br>';

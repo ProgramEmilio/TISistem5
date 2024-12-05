@@ -247,13 +247,21 @@ INSERT INTO `tipo_usuarios` (`Id_Utipo`, `Utipo`) VALUES
 (4, 'Jefe de taller'),
 (5, 'Consejo');
 
-INSERT INTO `usuarios` (`Id_usuario`, `Id_Utipo`, `nombre`, `apellido`, `Id_departamento`,`Id_especial`, `contraseña`) VALUES 
+
+INSERT INTO `usuarios` (`Id_usuario`, `Id_Utipo`, `nombre`, `apellido`, `Id_departamento`, `Id_especial`, `contraseña`) VALUES 
 (1, '1', 'Emilio', 'Palma Jimenez', '1', '1', '12'), 
 (2, '2', 'Pedro', 'Ramirez Parra', '2', '2', '12'), 
 (3, '3', 'Juan', 'Melendres Lechuga', '1', '3', '12'), 
 (4, '2', 'Ramon', 'Ramirez Parra', '3', '1', '12'), 
-(5, '4', 'Angel', 'sanchez de la Cruz', '1', '2', '12'), 
-(6, '3', 'Ghost', 'Ramirez Parra', '1', '4', '12');
+(5, '4', 'Angel', 'Sanchez de la Cruz', '1', '2', '12'), 
+(6, '5', 'Ghost', 'Ramirez Parra', '1', '4', '12'),
+(7, '3', 'Carlos', 'Martinez Lopez', '4', '5', '12'),
+(8, '3', 'Sofia', 'Gomez Fernandez', '2', '5', '12'),
+(9, '3', 'Luis', 'Sanchez Vargas', '3', '4', '12'),
+(10, '3', 'Ana', 'Pérez Morales', '5', '3', '12'),
+(11, '3', 'Roberto', 'Lopez Ruiz', '1', '2', '12'),
+(12, '3', 'Fernanda', 'Torres Guzman', '4', '1', '12');
+
 
 INSERT INTO `salon` (`Id_salon`, `Id_edificio`, `tipo`, `Id_usuario`, `descripcion`) VALUES 
 ('A1', 'A', '1', '1', 'Clases normales'), 

@@ -246,18 +246,25 @@ if (isset($_POST['Levantar_Reporte'])) {
             <br>
             <select name="catalogo" required>
              <?php
-            $sql = "SELECT Id_catalogo, catalogo FROM catalogo_servicios";
-            $result_catalogo = $conn->query($sql);
+                $sql = "SELECT cs.Id_catalogo, cs.catalogo, ce.Especial 
+                        FROM catalogo_servicios cs
+                        JOIN catalogo_especial ce ON cs.Id_especial = ce.Id_especial";
 
-            if ($result_catalogo->num_rows > 0) {
-                while ($row_catalogo = $result_catalogo->fetch_assoc()) {
-                    echo "<option value='{$row_catalogo['Id_catalogo']}'>{$row_catalogo['catalogo']}</option>";
+                $result_catalogo = $conn->query($sql);
+
+                if ($result_catalogo->num_rows > 0) {
+                    while ($row_catalogo = $result_catalogo->fetch_assoc()) {
+                        // Mostrar el nombre del servicio y la especialidad separados por un guion
+                        echo "<option value='{$row_catalogo['Id_catalogo']}'>
+                                {$row_catalogo['catalogo']} - {$row_catalogo['Especial']}
+                            </option>";
+                    }
+                } else {
+                    echo "<option value=''>No hay catálogos de servicios disponibles</option>";
                 }
-            } else {
-                echo "<option value=''>No hay catálogos de servicios disponibles</option>";
-            }
-            ?>
-         </select>
+                ?>
+            </select>
+
          <br><br>
 
             <?php if ($Usu['Id_Utipo']!=2): ?>
