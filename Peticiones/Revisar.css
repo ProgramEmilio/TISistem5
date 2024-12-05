@@ -1,0 +1,82 @@
+.reporte {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.reporte-encabezado {
+    display: flex;
+    justify-content: space-between;
+}
+
+.reporte-detalles {
+    margin-top: 10px;
+}
+
+.reporte-acciones {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.reporte-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.reporte-info, .reporte-accion {
+    width: 48%;
+}
+
+.reporte-info {
+    flex: 1;
+    text-align: left;
+}
+
+.reporte-accion {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex: 0.3;
+    text-align: right;
+}
+
+.reporte-accion p {
+    margin: 5px 0;
+}
+
+.reporte-accion button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.reporte-accion button:hover {
+    background-color: #0056b3;
+}
+
+
+.div_boton {
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.button {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
