@@ -44,8 +44,8 @@ if (isset($_POST['Levantar_Reporte'])) {
     $presupuesto = $_POST['presupuesto'];
 
     // Insertar la petición en la tabla Peticion
-    $sql_peticion = "INSERT INTO Peticion (Id_trabajador, Id_equipo, Estado, Fecha, peticion, presupuesto)
-                     VALUES ('$id_usuario_actual', '$id_equipo', '$estado', '$fecha_hora_actual', '$peticion', '$presupuesto')";
+    $sql_peticion = "INSERT INTO Peticion (Id_trabajador, Id_reporte, Id_equipo, Estado, Fecha, Id_reparacion, presupuesto)
+                     VALUES ('$id_usuario_actual', '$id_reporte', '$id_equipo', '$estado', '$fecha_hora_actual', '$peticion', '$presupuesto')";
 
     // Ejecutar la consulta
     if ($conn->query($sql_peticion) === TRUE) {
@@ -183,7 +183,24 @@ $Usu = $result->fetch_assoc(); // Obtener el registro como un array asociativo
 
             <label for="peticion">Descripción de la Petición:</label>
             <br>
-            <textarea name="peticion" rows="4" cols="50" required></textarea>
+            <select name="peticion" required>
+             <?php
+                $sql = "SELECT * FROM catalogo_reparacion";
+
+                $result_catalogo = $conn->query($sql);
+
+                if ($result_catalogo->num_rows > 0) {
+                    while ($row_catalogo = $result_catalogo->fetch_assoc()) {
+                        // Mostrar el nombre del servicio y la especialidad separados por un guion
+                        echo "<option value='{$row_catalogo['Id_reparacion']}'>
+                                {$row_catalogo['reparacion']} - Tiempo estimado: {$row_catalogo['timepo']}H
+                            </option>";
+                    }
+                } else {
+                    echo "<option value=''>No hay catálogos de servicios disponibles</option>";
+                }
+                ?>
+            </select>
             <br><br>
 
             <label for="presupuesto">Presupuesto Estimado:</label>

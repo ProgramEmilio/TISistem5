@@ -103,11 +103,12 @@ Fecha_Liberado datetime not null
 
 Create table Peticion(
 Id_peticion int not null primary key auto_increment,
+Id_reporte int not null,
 Id_trabajador int not null,
 Id_equipo varchar(15) not null,
 Estado varchar(15)not null,
 Fecha datetime,
-peticion text not null,
+Id_reparacion int not null,
 presupuesto float not null
 );
 
@@ -120,6 +121,12 @@ Id_especial int not null
 Create table catalogo_especial(
 Id_especial int not null primary key auto_increment,
 Especial text not null
+);
+
+Create table catalogo_reparacion(
+Id_reparacion int not null primary key auto_increment,
+reparacion text not null,
+timepo int not null
 );
 
 Create table Problemas(
@@ -157,7 +164,9 @@ foreign key(usuario) references Usuarios(Id_usuario)
 );
 
 alter table Peticion add(
-foreign key(Id_trabajador) references Usuarios(Id_usuario)
+foreign key(Id_trabajador) references Usuarios(Id_usuario),
+foreign key(Id_reparacion) references catalogo_reparacion(Id_reparacion),
+foreign key(Id_reporte) references Reporte(Id_reporte)
 );
 
 alter table Reporte add(
@@ -196,9 +205,9 @@ foreign key(Id_salon) references salon(Id_salon)
 
 -- Inserts
 INSERT INTO `departamento` (`Id_departamento`, `nombre`, `J_departamento`) VALUES 
-(NULL, 'Sistemas', 'Marysol'), 
-(NULL, 'Gestion Empresarial', 'Fidel castro'), 
-(NULL, 'Industrial', 'Espinosa paz');
+(1, 'Sistemas', 'Marysol'), 
+(2, 'Gestion Empresarial', 'Fidel castro'), 
+(3, 'Industrial', 'Espinosa paz');
 
 -- Insertar datos en catalogo_especial
 INSERT INTO catalogo_especial (Especial) VALUES 
@@ -222,6 +231,29 @@ INSERT INTO catalogo_servicios (catalogo, Id_especial) VALUES
 ('Optimización de velocidad del sistema', 5),
 ('Eliminación de software no deseado', 5);
 
+-- Insertar datos en catalogo_reparacion
+INSERT INTO catalogo_reparacion (reparacion, timepo) VALUES
+('Compra de disco duro', 8),
+('Adquisición de tarjeta madre nueva', 12),
+('Reemplazo de memoria RAM', 4),
+('Adquisición de nueva fuente de poder', 4),
+('Adquisición de disco duro para reemplazo', 10),
+('Compra de licencia de Windows', 3),
+('Compra de licencia de software adicional', 3),
+('Adquisición de licencia para Linux empresarial', 7),
+('Compra de tarjeta gráfica nueva para actualización', 5),
+('Adquisición de SSD para mejorar rendimiento', 6),
+('Compra de software antivirus para limpieza', 4),
+('Adquisición de batería para laptop', 6),
+('Compra de herramientas para diagnóstico avanzado', 3),
+('Adquisición de regulador o UPS para protección eléctrica', 4),
+('Compra de dispositivo USB para instalación', 1),
+('Compra de tarjeta de red Wi-Fi para compatibilidad', 3),
+('Adquisición de módulos adicionales de memoria RAM', 6),
+('Compra de software de limpieza profesional', 2),
+('Sustitución de teclado de laptop', 5),
+('Compra de pantalla para reemplazo en laptop', 8),
+('Compra de cargador original para laptop', 3);
 
 INSERT INTO `edificio` (`Id_edificio`, `Id_departamento`) VALUES 
 ('A', '1'), 
@@ -254,13 +286,13 @@ INSERT INTO `usuarios` (`Id_usuario`, `Id_Utipo`, `nombre`, `apellido`, `Id_depa
 (3, '3', 'Juan', 'Melendres Lechuga', '1', '3', '12'), 
 (4, '2', 'Ramon', 'Ramirez Parra', '3', '1', '12'), 
 (5, '4', 'Angel', 'Sanchez de la Cruz', '1', '2', '12'), 
-(6, '5', 'Ghost', 'Ramirez Parra', '1', '4', '12'),
-(7, '3', 'Carlos', 'Martinez Lopez', '4', '5', '12'),
+(6, '5', 'Ghost', 'Ramirez Parra', '1', '1', '12'),
+(7, '3', 'Carlos', 'Martinez Lopez', '1', '5', '12'),
 (8, '3', 'Sofia', 'Gomez Fernandez', '2', '5', '12'),
 (9, '3', 'Luis', 'Sanchez Vargas', '3', '4', '12'),
-(10, '3', 'Ana', 'Pérez Morales', '5', '3', '12'),
+(10, '3', 'Ana', 'Pérez Morales', '3', '3', '12'),
 (11, '3', 'Roberto', 'Lopez Ruiz', '1', '2', '12'),
-(12, '3', 'Fernanda', 'Torres Guzman', '4', '1', '12');
+(12, '3', 'Fernanda', 'Torres Guzman', '2', '1', '12');
 
 
 INSERT INTO `salon` (`Id_salon`, `Id_edificio`, `tipo`, `Id_usuario`, `descripcion`) VALUES 

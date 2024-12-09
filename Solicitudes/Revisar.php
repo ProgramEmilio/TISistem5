@@ -334,6 +334,51 @@ $Usu = $result->fetch_assoc(); // Obtener el registro como un array asociativo
                 // Mostrar el nombre del catálogo en lugar del ID
                 echo "<p><strong>Servicio:</strong> " . $nombre_catalogo . "</p>";
                 
+                
+                $id_repo = $row['Id_reporte']; // Id del reporte actual
+                $sql_repo = "SELECT * FROM Peticion WHERE Id_reporte = '$id_repo'";
+                $result_repo = $conn->query($sql_repo);
+
+                if ($result_repo->num_rows > 0) {
+                    // Variables para almacenar los estados
+                    $estado_en_proceso = false;
+                    $estado_aprobado = false;
+                    $estado_denegado = false;
+                    $tiempo_total = 0;
+
+                    // Recorrer las peticiones asociadas al reporte
+                    while ($row_repo = $result_repo->fetch_assoc()) {
+                        $estado = $row_repo['Estado'];
+
+                        if ($estado === 'En Proceso') {
+                            $estado_en_proceso = true;
+                        } elseif ($estado === 'Aprobado') {
+                            $estado_aprobado = true;
+
+                            // Obtener el tiempo de la reparación correspondiente
+                            $id_reparacion = $row_repo['Id_reparacion'];
+                            $sql_reparacion = "SELECT timepo FROM catalogo_reparacion WHERE Id_reparacion = '$id_reparacion'";
+                            $result_reparacion = $conn->query($sql_reparacion);
+
+                            if ($result_reparacion->num_rows > 0) {
+                                $row_reparacion = $result_reparacion->fetch_assoc();
+                                $tiempo_total += $row_reparacion['timepo'];
+                            }
+                        } elseif ($estado === 'Denegado') {
+                            $estado_denegado = true;
+                        }
+                    }
+
+                    // Determinar el mensaje a mostrar
+                    if ($estado_en_proceso) {
+                        echo "Petición en proceso, Espera indeterminada.";
+                    } elseif ($estado_aprobado) {
+                        echo "El tiempo de espera aproximado es de $tiempo_total Horas.";
+                    } elseif ($estado_denegado) {
+                        echo "Tiempo de espera Indefinido.";
+                    }
+                }
+
                 if (($id_utipo == 1 || $id_utipo == 4) && $row['Estado'] == "Por Asignar") {
                     // Suponiendo que ya tienes el valor de 'Id_reporte' en la variable $row
                     $id_reporte = $row['Id_reporte']; // Obtener el Id del reporte

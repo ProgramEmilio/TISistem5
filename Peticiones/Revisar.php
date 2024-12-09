@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Id_peticion']) && iss
         $stmt->bind_param('si', $nuevo_estado, $id_peticion);
 
         if ($stmt->execute()) {
-            echo "El estado de la petición con ID $id_peticion ha sido actualizado a '$nuevo_estado'.";
+            //echo "El estado de la petición con ID $id_peticion ha sido actualizado a '$nuevo_estado'.";
         } else {
             echo "Error al actualizar el estado: " . $stmt->error;
         }
@@ -496,7 +496,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Id_peticion']) && iss
                     echo "<p><strong>Equipo en Cuestion:</strong></p>";
                     echo "<p>" . $id_equipo2 . " Ubicado en el edificio ".($id_edificio2 ?? 'N/A') .", Salon ".($id_salon2 ?? 'N/A')."</p>";                       
                     echo "<p><strong>Realizado por:</strong> " . $row_tras2['nombre'] .' '.$row_tras2['apellido']. "</p>";
-                    echo "<p><strong>Descripcion:</strong> " . $row2['peticion'] . "</p>";
+                    
+                    // Obtener el nombre del catálogo
+                    $id_reparacion = $row2['Id_reparacion'];
+                    $sql_reparacion = "SELECT reparacion FROM catalogo_reparacion WHERE Id_reparacion = '$id_reparacion'";
+                    $result_reparacion = $conn->query($sql_reparacion);
+
+                    if ($result_reparacion->num_rows > 0) {
+                        $row_reparacion = $result_reparacion->fetch_assoc();
+                        $nombre_reparacion = $row_reparacion['reparacion'];
+                    } else {
+                        $nombre_reparacion = 'N/A'; // Si no se encuentra un catálogo
+                    }
+
+                    echo "<p><strong>Descripcion:</strong> " . $nombre_reparacion . "</p>";
+                    
                     echo "<p><strong>Presupuesto Solicitado:</strong> " . $row2['presupuesto'] . "</p>";
 
                     echo "</div>";
